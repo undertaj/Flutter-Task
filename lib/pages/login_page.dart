@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
             height: 20.0,
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
             child: Column(
               children: [
                 TextFormField(
@@ -39,11 +39,22 @@ class LoginPage extends StatelessWidget {
                 )
                 ),
                 TextFormField(
+                  obscureText: true,
                     decoration: const InputDecoration(
                         hintText: "Enter Password",
                         labelText: "Password"
                     )
                 ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ElevatedButton(
+                    child: Text("Sign In"),
+                    style: TextButton.styleFrom(),
+                    onPressed: () {
+                        print("Hi Codepur");
+                    }
+                    )
               ],
             ),
           )
