@@ -10,6 +10,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String name = "";
   bool changeButton = false;
+  final _formkey = GlobalKey<FormState>();
 
   @override
     Widget build(BuildContext context) {
@@ -47,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onChanged: (value) {
                         name = value;
+
                         setState(() {});
                         },
                     ),
@@ -62,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     InkWell(
                       onTap: () async {
+
                         setState(() {
                           changeButton = true;
                         });
@@ -88,13 +91,30 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    // ElevatedButton(
-                    //   child: Text("Login"),
-                    //   style: TextButton.styleFrom(minimumSize: Size(150, 40)),
-                    //   onPressed: () {
-                    //     Navigator.pushNamed(context, MyRoutes.homeRoute);
-                    //   },
-                    // )
+                    SizedBox(
+                      height: 90.0,
+                    ),
+
+                    ElevatedButton(
+                      child: Text("Forgot Password ?"),
+                      style: TextButton.styleFrom(minimumSize: Size(100, 40)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, MyRoutes.forgotRoute);
+                      },
+                    ),
+
+                    SizedBox(
+                      height: 5.0,
+                    ),
+
+                    const Text("Don't Have An Account ?"),
+                    ElevatedButton(
+                      child: Text("Sign Up"),
+                      style: TextButton.styleFrom(minimumSize: Size(100, 40)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, MyRoutes.registerRoute);
+                      },
+                    )
           ],
           ),
         )

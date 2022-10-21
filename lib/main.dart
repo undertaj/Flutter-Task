@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_app/pages/forgot_page.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/pages/login_page.dart';
+import 'package:my_app/pages/register_page.dart';
 import 'package:my_app/utils/routes.dart';
-import '';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       themeMode: ThemeMode.light,
 
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
 
       theme: ThemeData(
           primarySwatch: Colors.deepPurple,
@@ -28,7 +29,9 @@ class MyApp extends StatelessWidget {
       routes: {
         "/" : (context) => LoginPage(),
         MyRoutes.homeRoute : (context) => HomePage(),
-        MyRoutes.loginRoute : (context) => LoginPage()
+        MyRoutes.loginRoute : (context) => LoginPage(),
+        MyRoutes.registerRoute : (context) => RegisterPage(),
+        MyRoutes.forgotRoute : (context) => ForgotPage()
       },
     );
   }
