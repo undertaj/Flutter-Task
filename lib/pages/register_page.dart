@@ -12,6 +12,7 @@ class  RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   String name = "";
   bool changeButton = false;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,75 +21,101 @@ class _RegisterPageState extends State<RegisterPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
-
               Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 32.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 100.0,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Enter First Name",
-                        labelText: "First Name",
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 100.0,
                       ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Enter First Name",
+                          labelText: "First Name",
+                        ),
+                          validator: (value) {
+                            if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
+                              return 'Enter correct first name';
+                            }else {
+                              return null;
+                            }
+                          }
 
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "Enter Last Name",
-                        labelText: "Last Name",
+                      ),// Name
+                      TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: "Enter Last Name",
+                          labelText: "Last Name",
+                        ),
+                          validator: (value) {
+                            if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
+                              return 'Enter correct last name';
+                            }else {
+                              return null;
+                            }
+                          }
+                      ),// LastName
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Enter Email ID",
+                          labelText: "Email ID",
+                        ),
+                          validator: (value) {
+                            if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value!)){
+                              return 'Enter correct email';
+                            }else {
+                              return null;
+                            }
+                          }
+                      ),// Email
+                      TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: "Enter password",
+                          labelText: "Password",
+                        ),
+                          validator: (value) {
+                            if(value!.isEmpty) {
+                              return 'Password cannot be empty';
+                            }
+                            else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$&*]).{8,15}$').hasMatch(value!)){
+                              return 'Enter correct password';
+                            }else {
+                              return null;
+                            }
+                          }
+                      ),// Password
+                      SizedBox(
+                        height: 40.0,
                       ),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Enter Email ID",
-                        labelText: "Email ID",
+                      ElevatedButton(
+                        child: Text("Sign Up"),
+                        style: TextButton.styleFrom(minimumSize: Size(150, 40)),
+                        onPressed: () {
+                          if(formKey.currentState!.validate()) {
+                            Navigator.pushNamed(context, MyRoutes.homeRoute);
+                          }
+                        },
                       ),
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "Enter password",
-                        labelText: "Password",
+                      SizedBox(
+                        height: 40.0,
                       ),
-                    ),
-                    SizedBox(
-                      height: 40.0,
-                    ),
-
-                    ElevatedButton(
-                      child: Text("Sign Up"),
-                      style: TextButton.styleFrom(minimumSize: Size(150, 40)),
-                      onPressed: () {
-                        Navigator.pushNamed(context, MyRoutes.homeRoute);
-                      },
-                    ),
-
-                    SizedBox(
-                      height: 40.0,
-                    ),
-
-                    const Text("Already A User ?"),
-
-                    ElevatedButton(
-                      child: Text("Login"),
-                      style: TextButton.styleFrom(minimumSize: Size(100, 40)),
-                      onPressed: () {
-                        Navigator.pushNamed(context, MyRoutes.loginRoute);
-                      },
-                    ),
-
-                  ],
+                      const Text("Already A User ?"),
+                      ElevatedButton(
+                        child: Text("Login"),
+                        style: TextButton.styleFrom(minimumSize: Size(100, 40)),
+                        onPressed: () {
+                          Navigator.pushNamed(context, MyRoutes.loginRoute);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               )
-
-
-
             ],
           ),
         ));
