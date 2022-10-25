@@ -41,6 +41,10 @@ dependencies:
   # Firebase Database
   cloud_firestore: ^4.0.2
 
+  # Firebase
+  firebase_core: ^2.1.0
+  firebase_auth: ^4.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

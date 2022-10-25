@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/main.dart';
+import 'package:my_app/pages/register_page.dart';
 import '../utils/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -11,9 +14,35 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   String name = "";
   bool changeButton = false;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
     Widget build(BuildContext context) {
+
+      Future signIn() async{
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => Center(child: CircularProgressIndicator())
+        );
+         try {
+           await FirebaseAuth.instance.signInWithEmailAndPassword(
+             email: emailController.text.trim(),
+             password: passwordController.text.trim(),
+           );
+         }
+         on FirebaseAuthException catch (e) {
+           print(e);
+        }
+        navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      }
     return Material(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -44,13 +73,14 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: emailController,
                         decoration: InputDecoration(
-                          hintText: "Enter username",
-                          labelText: "Username",
+                          hintText: "Enter Email ID",
+                          labelText: "Email ID",
                         ),
                         validator: (value) {
-                          if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value!)){
-                            return 'Enter correct name';
+                          if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value!)){
+                            return 'Enter correct email';
                           }else {
                             return null;
                           }
@@ -60,9 +90,10 @@ class _LoginPageState extends State<LoginPage> {
                         //
                         //   setState(() {});
                         //   },
-                      ),
+                      ),// Email
                       TextFormField(
                         obscureText: true,
+                        controller: passwordController,
                         decoration: InputDecoration(
                           hintText: "Enter password",
                           labelText: "Password",
@@ -77,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             }
                           }
-                      ),
+                      ),// Password
                       SizedBox(
                         height: 40.0,
                       ),
@@ -118,29 +149,23 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextButton.styleFrom(minimumSize: Size(100, 40)),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            const Text('Logging in');
-                            Navigator.pushNamed(context, MyRoutes.homeRoute);
+                            signIn;
                           }
                           },
                           ),
-
-                          SizedBox(
+                      SizedBox(
                           height: 90.0,
                           ),
-
-                          ElevatedButton(
+                      ElevatedButton(
                           child: Text("Forgot Password ?"),
                           style: TextButton.styleFrom(minimumSize: Size(100, 40)),
                           onPressed: () {
                           Navigator.pushNamed(context, MyRoutes.forgotRoute);
                           },
                           ),
-
-                          SizedBox(
+                      SizedBox(
                           height: 5.0,
                           ),
-
-
                       const Text("Don't Have An Account ?"),
                       ElevatedButton(
                         child: Text("Sign Up"),
@@ -155,6 +180,9 @@ class _LoginPageState extends State<LoginPage> {
         )
       ],
     ),
-    ));
+    )
+    );
+
+
     }
     }
