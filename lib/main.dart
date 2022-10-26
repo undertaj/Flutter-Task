@@ -8,6 +8,7 @@ import 'package:my_app/pages/login_page.dart';
 import 'package:my_app/pages/register_page.dart';
 import 'package:my_app/utils/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../utils/utils.dart';
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>MaterialApp(
+    scaffoldMessengerKey: Utils.messengerKey,
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: title,

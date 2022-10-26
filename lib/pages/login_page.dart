@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/pages/register_page.dart';
 import '../utils/routes.dart';
+import '../utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/src/material/scaffold.dart';
+import 'package:flutter/services.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -27,11 +30,11 @@ class _LoginPageState extends State<LoginPage> {
     Widget build(BuildContext context) {
 
       Future signIn() async{
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => Center(child: CircularProgressIndicator())
-        );
+        // showDialog(
+        //     context: context,
+        //     barrierDismissible: false,
+        //     builder: (context) => Center(child: CircularProgressIndicator())
+        // );
          try {
            await FirebaseAuth.instance.signInWithEmailAndPassword(
              email: emailController.text.trim(),
@@ -41,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
          on FirebaseAuthException catch (e) {
            print(e);
         }
-        navigatorKey.currentState!.popUntil((route) => route.isFirst);
+        Navigator.pushNamed(context, MyRoutes.homeRoute);
       }
     return Material(
         color: Colors.white,
@@ -149,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextButton.styleFrom(minimumSize: Size(100, 40)),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            signIn;
+                            signIn();
                           }
                           },
                           ),
@@ -184,5 +187,30 @@ class _LoginPageState extends State<LoginPage> {
     );
 
 
+
+
     }
+  Future signIn() async{
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator())
+    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+    }
+    on FirebaseAuthException catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple)
+      );
+      Utils.showSnackBar(e.message);
+    }catch (e){
+      print(e);
+    }
+    Navigator.pushNamed(context, MyRoutes.homeRoute);
+  }
     }

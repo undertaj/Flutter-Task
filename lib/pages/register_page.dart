@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/routes.dart';
+import '../utils/utils.dart';
+import 'package:flutter/src/material/scaffold.dart';
+import 'package:flutter/services.dart';
 
 
 class  RegisterPage extends StatefulWidget {
@@ -14,7 +18,17 @@ class _RegisterPageState extends State<RegisterPage> {
   bool changeButton = false;
   final formKey = GlobalKey<FormState>();
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Material(
         color: Colors.white,
@@ -46,7 +60,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       ),// Name
                       TextFormField(
-                        obscureText: true,
                         decoration: InputDecoration(
                           hintText: "Enter Last Name",
                           labelText: "Last Name",
@@ -60,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           }
                       ),// LastName
                       TextFormField(
+                        controller: emailController,
                         decoration: InputDecoration(
                           hintText: "Enter Email ID",
                           labelText: "Email ID",
@@ -73,6 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           }
                       ),// Email
                       TextFormField(
+                        controller: passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: "Enter password",
@@ -97,7 +112,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: TextButton.styleFrom(minimumSize: Size(150, 40)),
                         onPressed: () {
                           if(formKey.currentState!.validate()) {
-                            Navigator.pushNamed(context, MyRoutes.homeRoute);
+                            // Navigator.pushNamed(context, MyRoutes.homeRoute);
+                            signUp();
                           }
                         },
                       ),
@@ -119,5 +135,28 @@ class _RegisterPageState extends State<RegisterPage> {
             ],
           ),
         ));
+  }
+  Future signUp() async {
+    // showDialog(
+    //     context: context,
+    //     barrierDismissible: false,
+    //     builder: (context) => Center(child: CircularProgressIndicator())
+    // );
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim()
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple)
+      );
+      Utils.showSnackBar(e.message);
+    }catch (e){
+      print(e);
+
+    }
+    Navigator.pushNamed(context, MyRoutes.homeRoute);
   }
 }
