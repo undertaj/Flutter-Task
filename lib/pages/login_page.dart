@@ -203,14 +203,14 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
     on FirebaseAuthException catch (e) {
-      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple)
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.deepPurple)
       );
-      Utils.showSnackBar(e.message);
-    }catch (e){
-      print(e);
+      Utils.showSnackBar(e.toString());
+    }catch (e) {
+      Utils.showSnackBar(e.toString());
     }
-    Navigator.pushNamed(context, MyRoutes.homeRoute);
+    // Navigator.popUntil(context, (route) => MyRoutes.homeRoute.isEmpty);
+    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
-    }
+}

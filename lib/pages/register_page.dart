@@ -137,26 +137,23 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
   Future signUp() async {
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: false,
-    //     builder: (context) => Center(child: CircularProgressIndicator())
-    // );
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator())
+    );
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim()
       );
+      Navigator.pushNamed(context, MyRoutes.verifyRoute);
     } on FirebaseAuthException catch (e) {
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple)
-      );
-      Utils.showSnackBar(e.message);
-    }catch (e){
-      print(e);
-
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple)
+      // );
+      Utils.showSnackBar(e.toString());
     }
-    Navigator.pushNamed(context, MyRoutes.homeRoute);
+
   }
 }

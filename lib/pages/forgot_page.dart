@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/utils/routes.dart';
 
+import '../main.dart';
 import '../utils/utils.dart';
 
 class ForgotPage extends StatefulWidget {
@@ -80,8 +81,10 @@ class _ForgotPageState extends State<ForgotPage> {
 
     } on FirebaseAuthException catch (e) {
       print(e);
-      Utils.showSnackBar(e.message);
+      Utils.showSnackBar(e.toString());
     }
+    Utils.showSnackBar('Password Reset Email sent!');
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }
 
