@@ -17,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   String name = "";
   bool changeButton = false;
+  bool _passwordVisible  = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -27,36 +28,24 @@ class _LoginPageState extends State<LoginPage> {
 
     super.dispose();
   }
+  @override
+  void initState() {
+    _passwordVisible = false;
+  }
+
     Widget build(BuildContext context) {
 
-      Future signIn() async{
-        // showDialog(
-        //     context: context,
-        //     barrierDismissible: false,
-        //     builder: (context) => Center(child: CircularProgressIndicator())
-        // );
-         try {
-           await FirebaseAuth.instance.signInWithEmailAndPassword(
-             email: emailController.text.trim(),
-             password: passwordController.text.trim(),
-           );
-         }
-         on FirebaseAuthException catch (e) {
-           print(e);
-        }
-        Navigator.pushNamed(context, MyRoutes.homeRoute);
-      }
-    return Material(
-        color: Colors.white,
-        child: SingleChildScrollView(
+
+    return Scaffold(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Image.asset(
-                "assets/images/login_image.png",
+                "assets/images/homepage_pic.png",
                 fit: BoxFit.cover,
               ),
               SizedBox(
-                height: 20.0,
+                height: 5.0,
               ),
               Text(
                 "Welcome $name",
@@ -69,22 +58,27 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20.0,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 16.0, horizontal: 32.0),
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                 child: Form(
                   key: formKey,
                   child: Column(
                     children: [
                       TextFormField(
                         controller: emailController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          suffixIcon: Icon(
+                            Icons.email, color: Colors.deepPurple, textDirection: TextDirection.ltr,
+                          ),
                           hintText: "Enter Email ID",
                           labelText: "Email ID",
                         ),
                         validator: (value) {
-                          if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value!)){
+                          if(value!.isEmpty ){
+                            return 'Email cannot be empty';
+                          } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value!)){
                             return 'Enter correct email';
-                          }else {
+                          } else {
                             return null;
                           }
                         }
@@ -94,10 +88,23 @@ class _LoginPageState extends State<LoginPage> {
                         //   setState(() {});
                         //   },
                       ),// Email
+                      SizedBox(height: 10),
                       TextFormField(
-                        obscureText: true,
+                        obscureText: !_passwordVisible,
                         controller: passwordController,
                         decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              (_passwordVisible) ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.deepPurple,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                          ),
                           hintText: "Enter password",
                           labelText: "Password",
                         ),
@@ -106,9 +113,9 @@ class _LoginPageState extends State<LoginPage> {
                               return 'Password cannot be empty';
                             }
                             else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$&*]).{8,15}$').hasMatch(value!)){
-                              return 'Enter correct password';
+                              return 'Enter a Strong Password (Atleast one upperCase, one lowercase, one digit and one special character)';
                             }else {
-                              return null;
+                              return 'Enter correct Password';
                             }
                           }
                       ),// Password
@@ -148,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                       //   ),
                       // ),
                       ElevatedButton(
-                        child: Text("Login"),
+                        child: Text("Login", style: TextStyle(fontSize: 20)),
                         style: TextButton.styleFrom(minimumSize: Size(100, 40)),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
@@ -157,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           ),
                       SizedBox(
-                          height: 90.0,
+                          height: 70.0,
                           ),
                       ElevatedButton(
                           child: Text("Forgot Password ?"),
@@ -185,11 +192,7 @@ class _LoginPageState extends State<LoginPage> {
     ),
     )
     );
-
-
-
-
-    }
+  }
   Future signIn() async{
     showDialog(
         context: context,
@@ -203,14 +206,10 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
     on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: Colors.deepPurple)
-      );
-      Utils.showSnackBar(e.toString());
-    }catch (e) {
+      print(e);
       Utils.showSnackBar(e.toString());
     }
     // Navigator.popUntil(context, (route) => MyRoutes.homeRoute.isEmpty);
-    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

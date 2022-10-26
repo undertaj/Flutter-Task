@@ -34,13 +34,10 @@ class _ForgotPageState extends State<ForgotPage> {
               img,
               fit: BoxFit.cover,
             ),
-
             SizedBox(
               height: 30.0,
             ),
-
             const Text("Enter your email and we'll send you a link to get back into your account."),
-
             TextFormField(
               controller: emailController,
               decoration: InputDecoration(
@@ -49,11 +46,9 @@ class _ForgotPageState extends State<ForgotPage> {
               ),
 
             ),
-
             SizedBox(
               height: 20.0,
             ),
-
             ElevatedButton.icon(
                 style: TextButton.styleFrom(minimumSize: Size(100, 40)),
                 icon: Icon(Icons.email_outlined),
@@ -63,7 +58,6 @@ class _ForgotPageState extends State<ForgotPage> {
                 )),
               onPressed: () => resetPassword(),
             )
-
           ],
         ),
       ),
@@ -77,13 +71,12 @@ class _ForgotPageState extends State<ForgotPage> {
     );
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
-      Utils.showSnackBar('Password Reset Email sent!');
 
+      Utils.showSnackBar('Password Reset Email sent!');
     } on FirebaseAuthException catch (e) {
       print(e);
       Utils.showSnackBar(e.toString());
     }
-    Utils.showSnackBar('Password Reset Email sent!');
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

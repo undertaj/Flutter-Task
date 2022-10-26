@@ -22,20 +22,20 @@ class MyApp extends StatelessWidget {
   static final String title = 'Firebase Auth';
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    scaffoldMessengerKey: Utils.messengerKey,
-      navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false,
-      routes: {
-        // "/" : (context) => LoginPage(),
-        MyRoutes.homeRoute : (context) => HomePage(),
-        MyRoutes.loginRoute : (context) => LoginPage(),
-        MyRoutes.registerRoute : (context) => RegisterPage(),
-        MyRoutes.forgotRoute : (context) => ForgotPage(),
-        MyRoutes.verifyRoute : (context) => VerifyEmailPage()
-     },
-      home: StreamBuilder<User?>(stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
+  Widget build(BuildContext context) =>  MaterialApp(
+          scaffoldMessengerKey: Utils.messengerKey,
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          routes: {
+            // "/" : (context) => LoginPage(),
+            MyRoutes.homeRoute : (context) => HomePage(),
+            MyRoutes.loginRoute : (context) => LoginPage(),
+            MyRoutes.registerRoute : (context) => RegisterPage(),
+            MyRoutes.forgotRoute : (context) => ForgotPage(),
+            MyRoutes.verifyRoute : (context) => VerifyEmailPage()
+          },
+          home: StreamBuilder<User?>(stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
@@ -49,16 +49,20 @@ class MyApp extends StatelessWidget {
               return LoginPage();
             }
           }),
-      themeMode: ThemeMode.light,
+          themeMode: ThemeMode.light,
+          theme: ThemeData(
+              primarySwatch: Colors.deepPurple,
+              textTheme: GoogleFonts.latoTextTheme(),
+              fontFamily: GoogleFonts.lato().fontFamily
+          ),
+          darkTheme: ThemeData(brightness: Brightness.dark)
 
-      theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          textTheme: GoogleFonts.latoTextTheme(),
-          fontFamily: GoogleFonts.lato().fontFamily
-      ),
-      darkTheme: ThemeData(brightness: Brightness.dark)
   );
 }
+
+
+
+
 
 
 

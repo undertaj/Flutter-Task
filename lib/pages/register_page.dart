@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../utils/routes.dart';
 import '../utils/utils.dart';
 import 'package:flutter/src/material/scaffold.dart';
@@ -17,7 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String name = "";
   bool changeButton = false;
   final formKey = GlobalKey<FormState>();
-
+  bool _passwordVisible = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -29,10 +30,14 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    _passwordVisible = false;
+  }
+
   Widget build(BuildContext context) {
-    return Material(
-        color: Colors.white,
-        child: SingleChildScrollView(
+    return Scaffold(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
@@ -40,95 +45,123 @@ class _RegisterPageState extends State<RegisterPage> {
                     vertical: 16.0, horizontal: 32.0),
                 child: Form(
                   key: formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100.0,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Enter First Name",
-                          labelText: "First Name",
-                        ),
-                          validator: (value) {
-                            if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
-                              return 'Enter correct first name';
-                            }else {
-                              return null;
-                            }
-                          }
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 95.0),
+                        const Text(
+                            "We're excited to have you onboard with us !!!",
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.deepPurple)
 
-                      ),// Name
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Enter Last Name",
-                          labelText: "Last Name",
                         ),
-                          validator: (value) {
-                            if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
-                              return 'Enter correct last name';
-                            }else {
-                              return null;
+                        SizedBox(height: 95.0),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "Enter First Name",
+                            labelText: "First Name",
+                          ),
+                            validator: (value) {
+                              if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
+                                return 'Enter correct first name';
+                              }else {
+                                return null;
+                              }
                             }
-                          }
-                      ),// LastName
-                      TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          hintText: "Enter Email ID",
-                          labelText: "Email ID",
+
                         ),
-                          validator: (value) {
-                            if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value!)){
-                              return 'Enter correct email';
-                            }else {
-                              return null;
+                        SizedBox(height: 10),// Name
+                        TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "Enter Last Name",
+                            labelText: "Last Name",
+                          ),
+                            validator: (value) {
+                              if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
+                                return 'Enter correct last name';
+                              }else {
+                                return null;
+                              }
                             }
-                          }
-                      ),// Email
-                      TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: "Enter password",
-                          labelText: "Password",
                         ),
-                          validator: (value) {
-                            if(value!.isEmpty) {
-                              return 'Password cannot be empty';
+                        SizedBox(height: 10),// LastName
+                        TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(
+                              Icons.email, color: Colors.deepPurple,
+                            ),
+                            hintText: "Enter Email ID",
+                            labelText: "Email ID",
+                          ),
+                            validator: (value) {
+                              if(value!.isEmpty ){
+                                return 'Email cannot be empty';
+                              } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value!)){
+                                return 'Enter correct email';
+                              } else {
+                                return null;
+                              }
                             }
-                            else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$&*]).{8,15}$').hasMatch(value!)){
-                              return 'Enter correct password';
-                            }else {
-                              return null;
+                        ),
+                        SizedBox(height: 10),// Email
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: _passwordVisible,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                (_passwordVisible) ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.deepPurple,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                            ),
+                            hintText: "Enter password",
+                            labelText: "Password",
+                          ),
+                            validator: (value) {
+                              if(value!.isEmpty) {
+                                return 'Password cannot be empty';
+                              }
+                              else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$&*]).{8,15}$').hasMatch(value!)){
+                                return 'Enter a Strong Password (Atleast one upperCase, one \nlowercase, one digit and one special character)';
+                              }else {
+                                return 'Enter correct Password';
+                              }
                             }
-                          }
-                      ),// Password
-                      SizedBox(
-                        height: 40.0,
-                      ),
-                      ElevatedButton(
-                        child: Text("Sign Up"),
-                        style: TextButton.styleFrom(minimumSize: Size(150, 40)),
-                        onPressed: () {
-                          if(formKey.currentState!.validate()) {
-                            // Navigator.pushNamed(context, MyRoutes.homeRoute);
-                            signUp();
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        height: 40.0,
-                      ),
-                      const Text("Already A User ?"),
-                      ElevatedButton(
-                        child: Text("Login"),
-                        style: TextButton.styleFrom(minimumSize: Size(100, 40)),
-                        onPressed: () {
-                          Navigator.pushNamed(context, MyRoutes.loginRoute);
-                        },
-                      ),
-                    ],
+                        ),// Password
+                        SizedBox(
+                          height: 40.0,
+                        ),
+                        ElevatedButton(
+                          child: Text("Sign Up", style: TextStyle(fontSize: 20),),
+                          style: TextButton.styleFrom(minimumSize: Size(150, 40)),
+                          onPressed: () {
+                            if(formKey.currentState!.validate()) {
+                              // Navigator.pushNamed(context, MyRoutes.homeRoute);
+                              signUp();
+                            }
+                          },
+                        ),
+                        SizedBox(height: 50.0,),
+                        const Text("Already A User ?"),
+                        ElevatedButton(
+                          child: Text("Login"),
+                          style: TextButton.styleFrom(minimumSize: Size(100, 40)),
+                          onPressed: () {
+                            Navigator.pushNamed(context, MyRoutes.loginRoute);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -149,11 +182,8 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       Navigator.pushNamed(context, MyRoutes.verifyRoute);
     } on FirebaseAuthException catch (e) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple)
-      // );
       Utils.showSnackBar(e.toString());
     }
-
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }
