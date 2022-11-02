@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/main.dart';
+import 'package:my_app/pages/googlesignin_page.dart';
 import 'package:my_app/pages/register_page.dart';
+import 'package:provider/provider.dart';
 import '../utils/routes.dart';
 import '../utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,18 +37,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
     Widget build(BuildContext context) {
-
-
     return Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 10,),
               Image.asset(
                 "assets/images/homepage_pic.png",
+                width: 300,
+                height: 300,
                 fit: BoxFit.cover,
-              ),
-              SizedBox(
-                height: 5.0,
               ),
               Text(
                 "Welcome $name",
@@ -54,9 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
-                height: 20.0,
-              ),
+              const SizedBox(height: 20.0,),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                 child: Form(
@@ -115,13 +114,11 @@ class _LoginPageState extends State<LoginPage> {
                             else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$&*]).{8,15}$').hasMatch(value!)){
                               return 'Enter a Strong Password (Atleast one upperCase, one lowercase, one digit and one special character)';
                             }else {
-                              return 'Enter correct Password';
+                              return null;
                             }
                           }
                       ),// Password
-                      SizedBox(
-                        height: 40.0,
-                      ),
+                      SizedBox(height: 40.0,),
                       // InkWell(
                       //   onTap: () async {
                       //     if (formKey.currentState!.validate()) {
@@ -163,27 +160,40 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           },
                           ),
-                      SizedBox(
-                          height: 70.0,
-                          ),
-                      ElevatedButton(
-                          child: Text("Forgot Password ?"),
-                          style: TextButton.styleFrom(minimumSize: Size(100, 40)),
+                      const SizedBox(height: 20.0,),
+                      ElevatedButton.icon(
+                          label: const Text('Sign In with Google', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          minimumSize: const Size(double.infinity, 50)
+                        ),
+                          icon: const FaIcon(FontAwesomeIcons.google, color: Colors.purpleAccent,),
                           onPressed: () {
-                          Navigator.pushNamed(context, MyRoutes.forgotRoute);
+                            final provider = Provider.of<GoogleSignInPage>(context, listen: false);
+                                provider.GoogleSignInPage();
                           },
+                      ),
+                      const SizedBox(height: 50.0,),
+                      InkWell(
+                          child: const Text("Forgot Password ?", style: TextStyle(fontSize: 16, color: Colors.deepPurple, fontWeight: FontWeight.bold),),
+                          onTap: () {
+                            Navigator.pushNamed(context, MyRoutes.forgotRoute);
+                          }
+                      ),
+                      const SizedBox(height: 10.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Don't Have An Account ?    ", style: TextStyle(fontSize: 16),),
+                          InkWell(
+                              child: const Text("Sign Up", style: TextStyle(fontSize: 16, color: Colors.deepPurple, fontWeight: FontWeight.bold),),
+                              onTap: () {
+                                Navigator.pushNamed(context, MyRoutes.registerRoute);
+                              }
                           ),
-                      SizedBox(
-                          height: 5.0,
-                          ),
-                      const Text("Don't Have An Account ?"),
-                      ElevatedButton(
-                        child: Text("Sign Up"),
-                        style: TextButton.styleFrom(minimumSize: Size(100, 40)),
-                        onPressed: () {
-                          Navigator.pushNamed(context, MyRoutes.registerRoute);
-                        },
-                      )
+                        ],
+                      ),
           ],
           ),
                 ),

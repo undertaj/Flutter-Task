@@ -22,7 +22,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   void initState() {
     super.initState();
 
-    // user needa to be created before
+    // user needs to be created before
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
 
     if(!isEmailVerified) {

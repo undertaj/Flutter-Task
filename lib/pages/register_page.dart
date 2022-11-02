@@ -131,34 +131,36 @@ class _RegisterPageState extends State<RegisterPage> {
                               if(value!.isEmpty) {
                                 return 'Password cannot be empty';
                               }
-                              else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$&*]).{8,15}$').hasMatch(value!)){
+                              else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[_!@#$&*]).{8,15}$').hasMatch(value!)){
                                 return 'Enter a Strong Password (Atleast one upperCase, one \nlowercase, one digit and one special character)';
                               }else {
-                                return 'Enter correct Password';
+                                return null;
                               }
                             }
                         ),// Password
-                        SizedBox(
-                          height: 40.0,
-                        ),
+                        SizedBox(height: 40.0,),
                         ElevatedButton(
-                          child: Text("Sign Up", style: TextStyle(fontSize: 20),),
-                          style: TextButton.styleFrom(minimumSize: Size(150, 40)),
+                          child: Text("Sign Up", style: TextStyle(fontSize: 15),),
+                          style: TextButton.styleFrom(minimumSize: Size(100, 40)),
                           onPressed: () {
-                            if(formKey.currentState!.validate()) {
+                            if (formKey.currentState!.validate()) {
                               // Navigator.pushNamed(context, MyRoutes.homeRoute);
                               signUp();
                             }
                           },
                         ),
                         SizedBox(height: 50.0,),
-                        const Text("Already A User ?"),
-                        ElevatedButton(
-                          child: Text("Login"),
-                          style: TextButton.styleFrom(minimumSize: Size(100, 40)),
-                          onPressed: () {
-                            Navigator.pushNamed(context, MyRoutes.loginRoute);
-                          },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Already A User ?    ", style: TextStyle(fontSize: 16),),
+                            InkWell(
+                                child: const Text("Login", style: TextStyle(fontSize: 16, color: Colors.deepPurple, fontWeight: FontWeight.bold),),
+                                onTap: () {
+                                    Navigator.pushNamed(context, MyRoutes.loginRoute);
+                                }
+                            ),
+                          ],
                         ),
                       ],
                     ),
