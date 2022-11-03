@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                           icon: const FaIcon(FontAwesomeIcons.google, color: Colors.purpleAccent,),
                           onPressed: () {
                             final provider = Provider.of<GoogleSignInPage>(context, listen: false);
-                                provider.googleLogin();
+                                provider.googleLogin().then((_) => Navigator.pushNamed(context, MyRoutes.homeRoute));
                           },
                       ),
                       const SizedBox(height: 50.0,),
@@ -224,30 +224,3 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class GoogleSignInPage extends ChangeNotifier {
-  final googleSignIn = GoogleSignIn();
-
-  GoogleSignInAccount? _user;
-
-  GoogleSignInAccount get user => _user!;
-
-  Future googleLogin() async {
-    try {
-      final googleUser = await googleSignIn.signIn();
-      if(googleUser == null ) return;
-      _user = googleUser;
-
-      final googleAuth = await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-    } on FirebaseAuthException catch (e) {
-    print(e);
-    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,))
-    }
-  }
-}
