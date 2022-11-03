@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/pages/googlesignin_page.dart';
 import 'package:my_app/pages/register_page.dart';
@@ -171,7 +172,6 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             final provider = Provider.of<GoogleSignInPage>(context, listen: false);
                                 provider.googleLogin();
-                                // Navigator.pushNamed(context, MyRoutes.homeRoute);
                           },
                       ),
                       const SizedBox(height: 50.0,),
@@ -218,9 +218,36 @@ class _LoginPageState extends State<LoginPage> {
     on FirebaseAuthException catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,));
-      // Utils.showSnackBar(e.toString());
     }
     // Navigator.popUntil(context, (route) => MyRoutes.homeRoute.isEmpty);
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+}
+
+class GoogleSignInPage extends ChangeNotifier {
+  final googleSignIn = GoogleSignIn();
+
+  GoogleSignInAccount? _user;
+
+  GoogleSignInAccount get user => _user!;
+
+  Future googleLogin() async {
+    try {
+      final googleUser = await googleSignIn.signIn();
+      if(googleUser == null ) return;
+      _user = googleUser;
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+    } on FirebaseAuthException catch (e) {
+    print(e);
+    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,))
+    }
   }
 }
