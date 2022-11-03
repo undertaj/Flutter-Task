@@ -10,7 +10,7 @@ import 'package:my_app/pages/verifyemail_page.dart';
 import 'package:my_app/utils/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import '../utils/utils.dart';
+
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +23,9 @@ class MyApp extends StatelessWidget {
   static final String title = 'Firebase Auth';
 
   @override
-  Widget build(BuildContext context) =>  MaterialApp(
-            scaffoldMessengerKey: Utils.messengerKey,
+  Widget build(BuildContext context) =>  ChangeNotifierProvider(
+      create: (context) => GoogleSignInPage(),
+      child: MaterialApp(
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             routes: {
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
             ),
             darkTheme: ThemeData(brightness: Brightness.dark)
 
-    );
+    ));
 
 }
 

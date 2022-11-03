@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 import '../utils/routes.dart';
-import '../utils/utils.dart';
 import 'package:flutter/src/material/scaffold.dart';
 import 'package:flutter/services.dart';
 
@@ -184,7 +183,8 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       Navigator.pushNamed(context, MyRoutes.verifyRoute);
     } on FirebaseAuthException catch (e) {
-      Utils.showSnackBar(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,));
+      // Utils.showSnackBar(e.toString());
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }

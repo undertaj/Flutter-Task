@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/utils/routes.dart';
 
 import '../main.dart';
-import '../utils/utils.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({Key? key}) : super(key: key);
@@ -71,11 +70,13 @@ class _ForgotPageState extends State<ForgotPage> {
     );
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Password Reset Email sent!'), backgroundColor: Colors.deepPurple,));
 
-      Utils.showSnackBar('Password Reset Email sent!');
+      // Utils.showSnackBar('Password Reset Email sent!');
     } on FirebaseAuthException catch (e) {
       print(e);
-      Utils.showSnackBar(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,));
+      // Utils.showSnackBar(e.toString());
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }

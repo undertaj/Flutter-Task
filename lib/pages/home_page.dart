@@ -14,15 +14,31 @@ class HomePage extends StatelessWidget {
         ),
 
       body:Center(
+      ),
+      drawer: Drawer(
         child:Column(
           children: [
+            SizedBox(height: 30),
             Text("Welcome\nSigned in as:"),
             SizedBox(height: 8),
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(user.photoURL!),
+            ),
+            SizedBox(height: 8),
             Text(
-              user.email!,
+              'Name:  ' + user.displayName!,
               style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Email:  ' + user.email!,
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold
               ),
             ),
             ElevatedButton(
@@ -34,7 +50,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      drawer: Drawer(),
     );
   }
 }

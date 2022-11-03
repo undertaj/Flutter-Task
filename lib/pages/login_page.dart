@@ -5,7 +5,6 @@ import 'package:my_app/pages/googlesignin_page.dart';
 import 'package:my_app/pages/register_page.dart';
 import 'package:provider/provider.dart';
 import '../utils/routes.dart';
-import '../utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/material/scaffold.dart';
 import 'package:flutter/services.dart';
@@ -171,7 +170,8 @@ class _LoginPageState extends State<LoginPage> {
                           icon: const FaIcon(FontAwesomeIcons.google, color: Colors.purpleAccent,),
                           onPressed: () {
                             final provider = Provider.of<GoogleSignInPage>(context, listen: false);
-                                provider.GoogleSignInPage();
+                                provider.googleLogin();
+                                // Navigator.pushNamed(context, MyRoutes.homeRoute);
                           },
                       ),
                       const SizedBox(height: 50.0,),
@@ -217,7 +217,8 @@ class _LoginPageState extends State<LoginPage> {
     }
     on FirebaseAuthException catch (e) {
       print(e);
-      Utils.showSnackBar(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,));
+      // Utils.showSnackBar(e.toString());
     }
     // Navigator.popUntil(context, (route) => MyRoutes.homeRoute.isEmpty);
     navigatorKey.currentState!.popUntil((route) => route.isFirst);

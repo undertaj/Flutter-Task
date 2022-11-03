@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/utils.dart';
+
 import 'home_page.dart';
 
 class VerifyEmailPage extends StatefulWidget {
@@ -45,7 +45,8 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       setState(() => canResendEmail = true);
 
     } on FirebaseAuthException catch (e) {
-      Utils.showSnackBar(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,));
+      // Utils.showSnackBar(e.toString());
     }
 
   }
