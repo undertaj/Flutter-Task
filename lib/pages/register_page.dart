@@ -61,6 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: "Enter First Name",
                             labelText: "First Name",
                           ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
                                 return 'Enter correct first name';
@@ -77,6 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: "Enter Last Name",
                             labelText: "Last Name",
                           ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if(value!.isEmpty || !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)){
                                 return 'Enter correct last name';
@@ -96,6 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: "Enter Email ID",
                             labelText: "Email ID",
                           ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if(value!.isEmpty ){
                                 return 'Email cannot be empty';
@@ -109,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 10),// Email
                         TextFormField(
                           controller: passwordController,
-                          obscureText: _passwordVisible,
+                          obscureText: !_passwordVisible,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             suffixIcon: IconButton(
@@ -126,6 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: "Enter password",
                             labelText: "Password",
                           ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if(value!.isEmpty) {
                                 return 'Password cannot be empty';
@@ -181,11 +185,10 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text.trim(),
           password: passwordController.text.trim()
       );
-      Navigator.pushNamed(context, MyRoutes.verifyRoute);
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message.toString()), backgroundColor: Colors.deepPurple,));
       // Utils.showSnackBar(e.toString());
     }
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

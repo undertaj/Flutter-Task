@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                           hintText: "Enter Email ID",
                           labelText: "Email ID",
                         ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if(value!.isEmpty ){
                             return 'Email cannot be empty';
@@ -107,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                           hintText: "Enter password",
                           labelText: "Password",
                         ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
                             if(value!.isEmpty) {
                               return 'Password cannot be empty';
